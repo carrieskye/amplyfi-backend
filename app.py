@@ -13,10 +13,12 @@ load_dotenv()
 
 # Setup
 main_client = MongoClient(os.getenv('MONGO_URL_MAIN'))
-docs = main_client.amplyfi.db_amplyfi.docs
+main_db = main_client.amplyfi
+docs = main_db.docs
 
 relations_client = MongoClient(os.getenv('MONGO_URL_RELATIONS'))
-companies = relations_client['amplyfi-relations'].companies
+relations_db = relations_client['amplyfi-relations']
+companies = relations_db.companies
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
