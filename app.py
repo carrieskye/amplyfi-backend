@@ -1,14 +1,12 @@
 import json
 import os
 
-import pymongo
 from bson import json_util
 from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Resource, Api, reqparse
 from pymongo import MongoClient
-from collections import OrderedDict
 
 load_dotenv()
 
@@ -57,11 +55,6 @@ class Companies(Resource):
 
 class Company(Resource):
     def get(self, company_name):
-        # company = json.loads(json_util.dumps(companies.find_one({'name': company_name})))
-        # company_docs = json.loads(
-        #     json_util.dumps(docs.find({'m_Companies': {'$in': [company_name]}}).sort('m_szYear', pymongo.DESCENDING)))
-        # company['docs'] = company_docs
-        # return company
         return json.loads(json_util.dumps(companies.find_one({'name': company_name})))
 
 
@@ -133,8 +126,8 @@ def update_company_with_doc(name, year, location, doc_simple, competitors):
 api.add_resource(Docs, '/api/docs')
 api.add_resource(Doc, '/api/docs/<doc_id>')
 api.add_resource(DocsCount, '/api/docs-count')
-api.add_resource(Company, '/api/companies/<company_name>')
 api.add_resource(Companies, '/api/companies')
+api.add_resource(Company, '/api/companies/<company_name>')
 api.add_resource(UpdateCompanies, '/api/update/companies')
 
 if __name__ == '__main__':
