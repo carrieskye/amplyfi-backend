@@ -1,23 +1,22 @@
 import json
+import os
 
 import pymongo
 from bson import json_util
+from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Resource, Api, reqparse
 from pymongo import MongoClient
 
+load_dotenv()
+
 # Setup
-user = 'amplyfi'
-pw = 'pg9sWc1hWkrI7nPBeSR5'
+main_client = MongoClient(os.getenv('MONGO_URL_MAIN'))
+docs = main_client.amplyfi.db_amplyfi.docs
 
-client_amplyfi = MongoClient(f'mongodb://{user}:{pw}@ds155396.mlab.com:55396/amplyfi')
-db_amplyfi = client_amplyfi.amplyfi
-docs = db_amplyfi.docs
-
-client_amplyfi_relations = MongoClient(f'mongodb://{user}:{pw}@ds155606.mlab.com:55606/amplyfi-relations')
-db_amplyfi_relations = client_amplyfi_relations['amplyfi-relations']
-companies = db_amplyfi_relations.companies
+relations_client = MongoClient(os.getenv('MONGO_URL_RELATIONS'))
+companies = relations_client['amplyfi-relations'].companies
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
